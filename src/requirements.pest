@@ -1,0 +1,43 @@
+WHITESPACE = _{ " " | "\t" }
+
+requirement_file = { SOI ~ ((line)? ~ NEWLINE)* }
+
+// meta = { meta | requirement }
+line = { extra_index_url | comment | package | path }
+
+package = { name ~ extras? ~ (version | ",")* ~ comment? }
+    name = @{ LETTER ~ chars }
+    extras = { "[" ~ (extra | ",")+ ~ "]" }
+        extra = @{ chars }
+    version = { comparison ~ number }
+
+path = { editable? ~ chars }
+editable = { ("-e" | "--editable") }
+
+comment = { "#" ~ some_text }
+
+extra_index_url = { "--extra-index-url" ~ url }
+
+
+comparison = _{ less_than | less_than_or_equal | not_equal | equal | greater_than_or_equal | greater_than | compatible_release | arbitrary_equal }
+    less_than = { "<" }
+    less_than_or_equal = { "<=" }
+    not_equal = { "!=" }
+    equal = { "==" }
+    greater_than_or_equal = { ">=" }
+    greater_than = { ">" }
+    compatible_release = { "~=" }
+    arbitrary_equal = { "===" }
+
+vcs = _{ git | hg | svn | bzr }
+    git = { "git" }
+    hg = { "hg" }
+    svn = { "svn" }
+    bzr = { "bzr" }
+
+chars = _{ (ASCII_ALPHANUMERIC | "_" | "-")+ }
+version_char = _{ (ASCII_ALPHANUMERIC | ".") }
+number = @{ version_char+ }
+some_char = _{ (LETTER | NUMBER | PUNCTUATION | SYMBOL) }
+some_text = { some_char* }
+url = @{ "http" ~ "s"? ~ "://" ~ some_char+ }

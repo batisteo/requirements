@@ -1,0 +1,22 @@
+[package]
+name = "requirements"
+version = "0.1.0"
+authors = ["Baptiste Darthenay <baptiste.darthenay@gmail.com>"]
+description = "Python PIP requirements.txt parser"
+keywords = ["python", "pip", "requirements"]
+categories = ["parser-implementations"]
+readme = "README.md"
+edition = "2018"
+license = "MIT"
+repository = "https://github.com/batisteo/requirements"
+
+[lib]
+name = "requirements"
+path = "./src/lib.rs"
+
+[dependencies]
+regex = "^1"
+pest = "^2"
+pest_derive = "^2"
+globwalk = "^0.7"
+walkdir = "^2"

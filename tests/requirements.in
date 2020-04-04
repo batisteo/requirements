@@ -1,0 +1,2 @@
+aiohttp
+passlib[argon2,chacha]

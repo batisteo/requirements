@@ -1,0 +1,9 @@
+# Example requirement file
+--extra-index-url https://pypi.example.com/pypi
+
+aiohttp
+black==19.10b0
+chardet  # upgrade at will
+Django>=2,<3
+-e editable_package
+passlib[argon2,chacha]

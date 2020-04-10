@@ -1,6 +1,17 @@
 use crate::Rule;
 use std::fmt;
 
+/// Semver comparison operators
+///
+/// Abstraction of semver comparison operators.
+///
+/// # Example
+///
+/// ```
+/// // Get a rule from Pest with a >=
+/// let operator = Comparison::from_rule(rule);
+/// println!(operator); // -> '>='
+/// ```
 #[derive(Debug, PartialEq)]
 pub enum Comparison {
     LessThan,

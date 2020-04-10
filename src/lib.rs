@@ -31,30 +31,30 @@ impl VersionControlSystem {
 #[grammar = "requirements.pest"]
 pub struct RequirementParser;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Requirement<'a> {
-    pub line: &'a str,
+    pub line: String,
     pub editable: bool,
-    pub name: &'a str,
-    pub comment: Option<&'a str>,
+    pub name: Option<String>,
+    pub comment: Option<String>,
     pub specifier: bool,
     pub vcs: Option<VersionControlSystem>,
     pub uri: Option<&'a Path>,
-    pub subdirectory: Option<&'a str>,
+    pub subdirectory: Option<String>,
     pub path: Option<&'a Path>,
-    pub hash_name: Option<&'a str>,
-    pub hash: Option<&'a str>,
-    pub revision: Option<&'a str>,
-    pub extras: Vec<&'a str>,
-    pub specs: Vec<(Comparison, &'a str)>,
-    pub extra_index_url: &'a str,
+    pub hash_name: Option<String>,
+    pub hash: Option<String>,
+    pub revision: Option<String>,
+    pub extras: Vec<String>,
+    pub specs: Vec<(Comparison, String)>,
+    pub extra_index_url: String,
 }
 
 impl Requirement<'_> {
     fn new<'a>() -> Requirement<'a> {
         Requirement {
-            line: "",
-            name: "",
+            line: String::new(),
+            name: None,
             specs: vec![],
             extras: vec![],
             comment: None,
@@ -67,28 +67,31 @@ impl Requirement<'_> {
             hash: None,
             revision: None,
             vcs: None,
-            extra_index_url: "",
+            extra_index_url: String::new(),
         }
     }
 }
 
-fn parse_version(pair: Pair<Rule>) -> (Comparison, &str) {
+fn parse_version(pair: Pair<Rule>) -> (Comparison, String) {
     let mut version = pair.into_inner();
     let comparison = Comparison::from_rule(version.next().unwrap().as_rule());
-    let number = version.next().unwrap().as_str();
+    let number = String::from(version.next().unwrap().as_str());
     (comparison, number)
 }
 
 fn parse_package(parsed: Pair<'_, Rule>) -> Requirement<'_> {
     let mut package = Requirement::new();
     for line in parsed.into_inner() {
-        package.line = line.as_str();
+        package.line = line.as_str().into();
         for pair in line.into_inner() {
             match &pair.as_rule() {
-                Rule::name => package.name = pair.as_str(),
+                Rule::name => package.name = Some(pair.as_str().into()),
                 Rule::version => package.specs.push(parse_version(pair)),
                 Rule::extras => {
-                    package.extras = pair.into_inner().map(|extra| extra.as_str()).collect()
+                    package.extras = pair
+                        .into_inner()
+                        .map(|extra| extra.as_str().into())
+                        .collect()
                 }
                 Rule::comment => {
                     package.comment = {
@@ -96,11 +99,11 @@ fn parse_package(parsed: Pair<'_, Rule>) -> Requirement<'_> {
                         if comment.is_empty() {
                             None
                         } else {
-                            Some(comment)
+                            Some(comment.into())
                         }
                     }
                 }
-                Rule::extra_index_url => package.extra_index_url = pair.as_str(),
+                Rule::extra_index_url => package.extra_index_url = pair.as_str().into(),
                 _ => (),
             }
         }

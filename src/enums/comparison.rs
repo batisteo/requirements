@@ -1,6 +1,8 @@
-use crate::Rule;
 use std::fmt;
 
+/// Semver comparison operators
+///
+/// Abstraction of semver comparison operators.
 #[derive(Debug, PartialEq)]
 pub enum Comparison {
     LessThan,
@@ -11,23 +13,6 @@ pub enum Comparison {
     GreaterThan,
     CompatibleRelease,
     ArbitraryEqual,
-}
-
-impl Comparison {
-    pub fn from_rule(rule: Rule) -> Comparison {
-        use Comparison::*;
-        match rule {
-            Rule::less_than => LessThan,
-            Rule::less_than_or_equal => LessThanOrEqual,
-            Rule::not_equal => NotEqual,
-            Rule::equal => Equal,
-            Rule::greater_than_or_equal => GreaterThanOrEqual,
-            Rule::greater_than => GreaterThan,
-            Rule::compatible_release => CompatibleRelease,
-            Rule::arbitrary_equal => ArbitraryEqual,
-            _ => ArbitraryEqual,
-        }
-    }
 }
 
 impl fmt::Display for Comparison {

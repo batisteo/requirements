@@ -1,11 +1,11 @@
 use std::{fs::read_to_string, path::Path};
 
-use requirements::{parse, Comparison, Requirement};
+use requirements::{self, prelude::*};
 
 #[test]
 fn test_one_requirement() {
     assert_eq!(
-        parse(&"pip\n").unwrap(),
+        requirements::parse_str(&"pip\n").unwrap(),
         vec![Requirement {
             line: String::from("pip"),
             name: Some(String::from("pip")),
@@ -31,7 +31,7 @@ fn test_requirements_txt() {
     let path = Path::new("tests/requirements.txt");
     let file = read_to_string(&path).expect("Cannot read file");
     assert_eq!(
-        parse(&file).unwrap(),
+        requirements::parse_str(&file).unwrap(),
         vec![
             Requirement {
                 line: String::from("# Example requirement file"),

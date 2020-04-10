@@ -25,7 +25,6 @@ extern crate pest_derive;
 mod parser;
 pub mod enums;
 pub mod requirements;
-pub mod prelude;
 
 use parser::parse;
 pub use crate::requirements::Requirement;

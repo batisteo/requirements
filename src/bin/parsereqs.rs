@@ -1,5 +1,5 @@
 use globwalk::GlobError;
-use requirements::{self, prelude::*};
+use requirements::{self, Requirement};
 use std::{env, fs, path::Path};
 use walkdir::DirEntry;
 

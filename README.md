@@ -8,7 +8,7 @@ both `.txt` or `.in`.
 The library has a prelude to simplify usage. Example:
 
 ```rust
-use requirements::{self, prelude::*};
+use requirements;
 
 fn main() {
     let content = "Django>=3.0.0";

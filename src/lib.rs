@@ -9,11 +9,8 @@
 //! Below is a basic example of how to use this library:
 //!
 //! ```
-//! use requirements::{self, Requirement};
-//! use std::{fs, path::Path};
-//!
 //! fn main() {
-//!     let content = fs::read_to_string(&Path::new("/tmp/requirements.txt")).unwrap();
+//!     let content = "Django==1.11";
 //!     let reqs = requirements::parse(&content).unwrap();
 //!
 //!     for req in reqs.into_iter() {

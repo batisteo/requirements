@@ -34,6 +34,7 @@ fn parse_requirements(path: &Path) -> () {
 }
 
 fn find_requirement_files() -> Result<Vec<DirEntry>, GlobError> {
+    // TODO: Use requirements directly for dependency globbing and resolution
     let globwalker = globwalk::GlobWalkerBuilder::from_patterns(".", &["*req*.{txt,in}"])
         .max_depth(4)
         .follow_links(true)

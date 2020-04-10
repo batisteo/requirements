@@ -10,6 +10,10 @@ edition = "2018"
 license = "MIT"
 repository = "https://github.com/batisteo/requirements"
 
+[[bin]]
+name = "parsereqs"
+path = "./src/bin/parsereqs.rs"
+
 [lib]
 name = "requirements"
 path = "./src/lib.rs"

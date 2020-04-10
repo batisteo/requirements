@@ -1,7 +1,7 @@
 use crate::Rule;
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Comparison {
     LessThan,
     LessThanOrEqual,

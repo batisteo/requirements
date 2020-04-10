@@ -1,0 +1,177 @@
+use std::{fs::read_to_string, path::Path};
+
+use requirements::{parse, Comparison, Requirement};
+
+#[test]
+fn test_one_requirement() {
+    assert_eq!(
+        parse(&"pip\n").unwrap(),
+        vec![Requirement {
+            line: String::from("pip"),
+            name: Some(String::from("pip")),
+            specs: vec![],
+            extras: vec![],
+            comment: None,
+            specifier: true,
+            editable: false,
+            uri: None,
+            subdirectory: None,
+            path: None,
+            hash_name: None,
+            hash: None,
+            revision: None,
+            vcs: None,
+            extra_index_url: String::new(),
+        }]
+    )
+}
+
+#[test]
+fn test_requirements_txt() {
+    let path = Path::new("tests/requirements.txt");
+    let file = read_to_string(&path).expect("Cannot read file");
+    assert_eq!(
+        parse(&file).unwrap(),
+        vec![
+            Requirement {
+                line: String::from("# Example requirement file"),
+                name: None,
+                specs: vec![],
+                extras: vec![],
+                comment: None,
+                specifier: true,
+                editable: false,
+                uri: None,
+                subdirectory: None,
+                path: None,
+                hash_name: None,
+                hash: None,
+                revision: None,
+                vcs: None,
+                extra_index_url: String::new(),
+            },
+            Requirement {
+                line: String::from("--extra-index-url https://pypi.example.com/pypi"),
+                name: None,
+                specs: vec![],
+                extras: vec![],
+                comment: None,
+                specifier: true,
+                editable: false,
+                uri: None,
+                subdirectory: None,
+                path: None,
+                hash_name: None,
+                hash: None,
+                revision: None,
+                vcs: None,
+                extra_index_url: String::new(), // String::from("https://pypi.example.com/pypi")
+            },
+            Requirement {
+                line: String::from("aiohttp"),
+                name: Some(String::from("aiohttp")),
+                specs: vec![],
+                extras: vec![],
+                comment: None,
+                specifier: true,
+                editable: false,
+                uri: None,
+                subdirectory: None,
+                path: None,
+                hash_name: None,
+                hash: None,
+                revision: None,
+                vcs: None,
+                extra_index_url: String::new(),
+            },
+            Requirement {
+                line: String::from("black==19.10b0"),
+                name: Some(String::from("black")),
+                specs: vec![(Comparison::Equal, String::from("19.10b0"))],
+                extras: vec![],
+                comment: None,
+                specifier: true,
+                editable: false,
+                uri: None,
+                subdirectory: None,
+                path: None,
+                hash_name: None,
+                hash: None,
+                revision: None,
+                vcs: None,
+                extra_index_url: String::new(),
+            },
+            Requirement {
+                line: String::from("chardet  # upgrade at will"),
+                name: Some(String::from("chardet")),
+                specs: vec![],
+                extras: vec![],
+                comment: Some(String::from("upgrade at will")),
+                specifier: true,
+                editable: false,
+                uri: None,
+                subdirectory: None,
+                path: None,
+                hash_name: None,
+                hash: None,
+                revision: None,
+                vcs: None,
+                extra_index_url: String::new(),
+            },
+            Requirement {
+                line: String::from("Django>=2,<3"),
+                name: Some(String::from("Django")),
+                specs: vec![
+                    (Comparison::GreaterThanOrEqual, String::from("2")),
+                    (Comparison::LessThan, String::from("3"))
+                ],
+                extras: vec![],
+                comment: None,
+                specifier: true,
+                editable: false,
+                uri: None,
+                subdirectory: None,
+                path: None,
+                hash_name: None,
+                hash: None,
+                revision: None,
+                vcs: None,
+                extra_index_url: String::new(),
+            },
+            Requirement {
+                line: String::from("-e editable_package"),
+                name: None, // Some(String::from("editable_package")),
+                specs: vec![],
+                extras: vec![],
+                comment: None,
+                specifier: true,
+                editable: false, // this is wrong
+                uri: None,
+                subdirectory: None,
+                path: None,
+                hash_name: None,
+                hash: None,
+                revision: None,
+                vcs: None,
+                extra_index_url: String::new(),
+            },
+            Requirement {
+                line: String::from("passlib[argon2,chacha]"),
+                name: Some(String::from("passlib")),
+                specs: vec![],
+                extras: vec![String::from("argon2"), String::from("chacha")],
+                comment: None,
+                specifier: true,
+                editable: false,
+                uri: None,
+                subdirectory: None,
+                path: None,
+                hash_name: None,
+                hash: None,
+                revision: None,
+                vcs: None,
+                extra_index_url: String::new(),
+            }
+        ]
+    )
+}

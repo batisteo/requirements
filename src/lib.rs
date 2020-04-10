@@ -8,7 +8,7 @@ extern crate pest_derive;
 
 mod enums;
 
-use enums::{Comparison, VersionControlSystem};
+pub use enums::{Comparison, VersionControlSystem};
 use pest::error::Error;
 use pest::iterators::Pair;
 use pest::Parser;

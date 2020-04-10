@@ -10,7 +10,7 @@
 //!
 //! ```
 //! fn main() {
-//!     let content = "Django==1.11";
+//!     let content = "Django>=3.0.0";
 //!     let reqs = requirements::parse(&content).unwrap();
 //!
 //!     for req in reqs.into_iter() {

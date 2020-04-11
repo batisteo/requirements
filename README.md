@@ -1,5 +1,7 @@
 # requirements
 
+![](https://github.com/batisteo/requirements/workflows/Rust/badge.svg)
+
 Fast parser of [Python requirement files](https://pip.readthedocs.io/en/1.1/requirements.html)
 both `.txt` or `.in`.
 

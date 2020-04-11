@@ -1,6 +1,6 @@
 [package]
 name = "requirements"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Baptiste Darthenay <baptiste.darthenay@gmail.com>"]
 description = "Python PIP requirements.txt parser"
 keywords = ["python", "pip", "requirements"]

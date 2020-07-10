@@ -23,6 +23,12 @@ pub struct Requirement<'a> {
 
 impl Requirement<'_> {
     pub fn new<'a>() -> Requirement<'a> {
+        Requirement::default()
+    }
+}
+
+impl Default for Requirement<'_> {
+    fn default() -> Self {
         Requirement {
             line: String::new(),
             name: None,
@@ -42,4 +48,3 @@ impl Requirement<'_> {
         }
     }
 }
-

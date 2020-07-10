@@ -24,12 +24,12 @@ mod parser;
 pub mod enums;
 mod requirements;
 
-use parser::parse;
+pub use parser::parse;
 pub use crate::requirements::Requirement;
 
 /// Parses requirements from a string
 pub fn parse_str(content: &str) -> Result<Vec<Requirement>, String> {
-    parse(content)
+    Ok(parse(content).map(Iterator::collect)?)
 }
 
 // TODO: Add file loading code (recursive?) here.

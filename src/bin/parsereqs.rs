@@ -1,5 +1,5 @@
 use globwalk::GlobError;
-use requirements::{self, Requirement};
+use requirements::{self, parse};
 use std::{env, fs, path::Path};
 use walkdir::DirEntry;
 
@@ -17,16 +17,14 @@ fn main() {
 
 fn parse_requirements(path: &Path) {
     let content = fs::read_to_string(&path).expect("Cannot read file");
-    let requirement_file: Vec<Requirement> = requirements::parse_str(&content).unwrap();
-
-    for requirement in requirement_file.into_iter() {
+    for requirement in parse(&content).unwrap() {
         if let Some(name) = requirement.name {
             print!("{} ", name);
         }
         if let Some(comment) = requirement.comment {
             print!("({}) ", comment)
         }
-        for (comparison, version) in requirement.specs.into_iter() {
+        for (comparison, version) in &requirement.specs {
             print!("{}{} ", comparison, version);
         }
         println!();

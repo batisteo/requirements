@@ -76,18 +76,15 @@ fn parse_package(parsed: Pair<'_, Rule>) -> Requirement<'_> {
     package
 }
 
-pub fn parse(unparsed_file: &str) -> Result<Vec<Requirement>, String> {
+pub fn parse(unparsed_file: &str) -> Result<impl Iterator<Item = Requirement>, String> {
     let req_file = match RequirementParser::parse(Rule::requirement_file, unparsed_file) {
         Ok(mut rules) => rules.next().unwrap(),
         Err(_) => return Err(String::from("Failed to parse requirements"))
     };
 
-    let requirements: Vec<Requirement> = req_file
+    Ok(req_file
         .into_inner()
         .filter(|pair| pair.as_rule() == Rule::line)
-        .map(parse_package)
-        .collect();
-
-    Ok(requirements)
+        .map(parse_package))
 }
 

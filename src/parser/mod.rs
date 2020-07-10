@@ -47,15 +47,15 @@ fn parse_version(pair: Pair<Rule>) -> (Comparison, String) {
 fn parse_package(parsed: Pair<'_, Rule>) -> Requirement<'_> {
     let mut package = Requirement::new();
     for line in parsed.into_inner() {
-        package.line = String::from(line.as_str()).clone();
+        package.line = String::from(line.as_str());
         for pair in line.into_inner() {
             match &pair.as_rule() {
-                Rule::name => package.name = Some(String::from(pair.as_str()).clone()),
+                Rule::name => package.name = Some(String::from(pair.as_str())),
                 Rule::version => package.specs.push(parse_version(pair)),
                 Rule::extras => {
                     package.extras = pair
                         .into_inner()
-                        .map(|extra| String::from(extra.as_str()).clone())
+                        .map(|extra| String::from(extra.as_str()))
                         .collect()
                 }
                 Rule::comment => {
@@ -64,11 +64,11 @@ fn parse_package(parsed: Pair<'_, Rule>) -> Requirement<'_> {
                         if comment.is_empty() {
                             None
                         } else {
-                            Some(String::from(comment).clone())
+                            Some(String::from(comment))
                         }
                     }
                 }
-                Rule::extra_index_url => package.extra_index_url = String::from(pair.as_str()).clone(),
+                Rule::extra_index_url => package.extra_index_url = String::from(pair.as_str()),
                 _ => (),
             }
         }

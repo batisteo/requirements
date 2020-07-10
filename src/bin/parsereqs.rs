@@ -15,7 +15,7 @@ fn main() {
     }
 }
 
-fn parse_requirements(path: &Path) -> () {
+fn parse_requirements(path: &Path) {
     let content = fs::read_to_string(&path).expect("Cannot read file");
     let requirement_file: Vec<Requirement> = requirements::parse_str(&content).unwrap();
 
@@ -39,7 +39,6 @@ fn find_requirement_files() -> Result<Vec<DirEntry>, GlobError> {
         .max_depth(4)
         .follow_links(true)
         .build()?
-        .into_iter()
         .filter_map(Result::ok)
         .collect();
     Ok(globwalker)

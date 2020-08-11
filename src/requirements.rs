@@ -1,7 +1,6 @@
 pub use crate::enums::{Comparison, VersionControlSystem};
 use std::path::Path;
 
-
 #[derive(Debug, PartialEq)]
 pub struct Requirement<'a> {
     pub line: String,

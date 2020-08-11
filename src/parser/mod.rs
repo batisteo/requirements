@@ -1,7 +1,7 @@
+use crate::enums::{Comparison, VersionControlSystem};
+use crate::requirements::Requirement;
 use pest::iterators::Pair;
 use pest::Parser;
-use crate::enums::{VersionControlSystem, Comparison};
-use crate::requirements::Requirement;
 
 impl VersionControlSystem {
     pub fn from_rule(rule: Rule) -> VersionControlSystem {
@@ -79,7 +79,7 @@ fn parse_package(parsed: Pair<'_, Rule>) -> Requirement<'_> {
 pub fn parse(unparsed_file: &str) -> Result<impl Iterator<Item = Requirement>, String> {
     let req_file = match RequirementParser::parse(Rule::requirement_file, unparsed_file) {
         Ok(mut rules) => rules.next().unwrap(),
-        Err(_) => return Err(String::from("Failed to parse requirements"))
+        Err(_) => return Err(String::from("Failed to parse requirements")),
     };
 
     Ok(req_file
@@ -87,4 +87,3 @@ pub fn parse(unparsed_file: &str) -> Result<impl Iterator<Item = Requirement>, S
         .filter(|pair| pair.as_rule() == Rule::line)
         .map(parse_package))
 }
-

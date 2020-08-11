@@ -20,12 +20,12 @@
 #[macro_use]
 extern crate pest_derive;
 
-mod parser;
 pub mod enums;
+mod parser;
 mod requirements;
 
-pub use parser::parse;
 pub use crate::requirements::Requirement;
+pub use parser::parse;
 
 /// Parses requirements from a string
 pub fn parse_str(content: &str) -> Result<Vec<Requirement>, String> {

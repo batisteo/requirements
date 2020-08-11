@@ -1,6 +1,6 @@
 use std::{fs::read_to_string, path::Path};
 
-use requirements::{self, Requirement, enums::Comparison};
+use requirements::{self, enums::Comparison, Requirement};
 
 #[test]
 fn test_one_requirement() {

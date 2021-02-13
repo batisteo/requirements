@@ -17,8 +17,29 @@ pub enum Comparison {
 
 impl fmt::Display for Comparison {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_str())
+    }
+}
+
+impl Comparison {
+    pub fn get(comparison: &str) -> Option<Self> {
         use Comparison::*;
-        let sign = match self {
+        match comparison {
+            "<" => Some(LessThan),
+            "<=" => Some(LessThanOrEqual),
+            "!=" => Some(NotEqual),
+            "==" => Some(Equal),
+            ">=" => Some(GreaterThanOrEqual),
+            ">" => Some(GreaterThan),
+            "~=" => Some(CompatibleRelease),
+            "===" => Some(ArbitraryEqual),
+            _ => None,
+        }
+    }
+
+    fn to_str(&self) -> &str {
+        use Comparison::*;
+        match self {
             LessThan => "<",
             LessThanOrEqual => "<=",
             NotEqual => "!=",
@@ -27,7 +48,6 @@ impl fmt::Display for Comparison {
             GreaterThan => ">",
             CompatibleRelease => "~=",
             ArbitraryEqual => "===",
-        };
-        write!(f, "{}", sign)
+        }
     }
 }

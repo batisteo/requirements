@@ -17,9 +17,6 @@
 //! }
 //! ```
 
-#[macro_use]
-extern crate pest_derive;
-
 pub mod enums;
 mod parser;
 mod requirements;
@@ -29,7 +26,5 @@ pub use parser::parse;
 
 /// Parses requirements from a string
 pub fn parse_str(content: &str) -> Result<Vec<Requirement>, String> {
-    Ok(parse(content)?)
+    Ok(parse(content))
 }
-
-// TODO: Add file loading code (recursive?) here.

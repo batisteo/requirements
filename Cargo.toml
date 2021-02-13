@@ -21,7 +21,5 @@ path = "./src/lib.rs"
 [dependencies]
 globwalk = "^0.7"
 logos = "^0.12"
-pest = "^2"
-pest_derive = "^2"
 regex = "^1"
 walkdir = "^2"

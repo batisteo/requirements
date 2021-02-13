@@ -1,10 +1,9 @@
-use crate::parser::Line;
-use LineType::*;
+use crate::Requirement;
 
 /// Different supported type per line
 #[derive(Debug, PartialEq)]
-pub enum LineType {
-    Specification(String),
+pub enum LineType<'a> {
+    Specification(Requirement<'a>),
     Comment(String),
     ExtraIndexUrl(String),
     Editable,

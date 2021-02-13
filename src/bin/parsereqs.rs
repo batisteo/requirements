@@ -17,7 +17,7 @@ fn main() {
 
 fn parse_requirements(path: &Path) {
     let content = fs::read_to_string(&path).expect("Cannot read file");
-    for requirement in parse(&content).unwrap() {
+    for requirement in parse(&content) {
         if let Some(name) = requirement.name {
             print!("{} ", name);
         }

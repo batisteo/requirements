@@ -1,3 +1,4 @@
+use crate::enums::Comparison;
 use logos::{Lexer, Logos};
 
 fn comment(lex: &mut Lexer<Token>) -> Option<String> {
@@ -10,93 +11,56 @@ fn name(lex: &mut Lexer<Token>) -> Option<String> {
     Some(lex.slice().to_owned())
 }
 
-fn string(lex: &mut Lexer<Token>) -> String {
-    lex.slice().to_owned()
-}
-
 fn extra(lex: &mut Lexer<Token>) -> Vec<String> {
     let slice = lex.slice().trim();
     slice.split(',').map(|s| s.to_owned()).collect()
 }
 
+fn comparison(lex: &mut Lexer<Token>) -> Comparison {
+    Comparison::get(lex.slice()).unwrap()
+}
+
 #[derive(Logos, Debug, PartialEq)]
 pub enum Token {
-    #[regex(r"[a-zA-Z0-9._-]+", name)]
+    #[regex(r"[a-zA-Z][a-zA-Z0-9._-]+", name, priority = 3)]
     Name(String),
 
     #[regex(r"\[[,a-zA-Z0-9._-]+\]", extra)]
     Extra(Vec<String>),
 
+    #[regex(r"-e ")]
+    Editable,
+
     #[regex(r"#(.*)", comment)]
     InlineComment(String),
 
-    #[regex(r"<", string)]
-    LessThan(String),
+    // #[regex(r"(<|<=)\d+", comparison, priority = 3)]
+    // Operator(Comparison),
+    #[regex(r"<", comparison)]
+    LessThan(Comparison),
 
-    #[regex(r"<=", string)]
-    LessThanOrEqual(String),
+    #[regex(r"<=", comparison)]
+    LessThanOrEqual(Comparison),
 
-    #[regex(r"!=", string)]
-    NotEqual(String),
+    #[regex(r"!=", comparison)]
+    NotEqual(Comparison),
 
-    #[regex(r"==", string)]
-    Equal(String),
+    #[regex(r"==", comparison)]
+    Equal(Comparison),
 
-    #[regex(r">=", string)]
-    GreaterThanOrEqual(String),
+    #[regex(r">=", comparison)]
+    GreaterThanOrEqual(Comparison),
 
-    #[regex(r">", string)]
-    GreaterThan(String),
+    #[regex(r">", comparison)]
+    GreaterThan(Comparison),
 
-    #[regex(r"~=", string)]
-    CompatibleRelease(String),
+    #[regex(r"~=", comparison)]
+    CompatibleRelease(Comparison),
 
-    #[regex(r"===", string)]
-    ArbitraryEqual(String),
+    #[regex(r"===", comparison)]
+    ArbitraryEqual(Comparison),
 
     #[error]
     #[regex(r"[ \t\n\f]+", logos::skip)]
     Error,
-}
-
-enum Operator {
-    LessThan,
-    LessThanOrEqual,
-    NotEqual,
-    Equal,
-    GreaterThanOrEqual,
-    GreaterThan,
-    CompatibleRelease,
-    ArbitraryEqual,
-}
-
-impl Operator {
-    fn key(operator: &str) -> Option<Operator> {
-        use Operator::*;
-        match operator {
-            "<" => Some(LessThan),
-            "<=" => Some(LessThanOrEqual),
-            "!=" => Some(NotEqual),
-            "==" => Some(Equal),
-            ">=" => Some(GreaterThanOrEqual),
-            ">" => Some(GreaterThan),
-            "~=" => Some(CompatibleRelease),
-            "===" => Some(ArbitraryEqual),
-            &_ => None,
-        }
-    }
-
-    fn value(&self) -> &str {
-        use Operator::*;
-        match self {
-            LessThan => "<",
-            LessThanOrEqual => "<=",
-            NotEqual => "!=",
-            Equal => "==",
-            GreaterThanOrEqual => ">=",
-            GreaterThan => ">",
-            CompatibleRelease => "~=",
-            ArbitraryEqual => "===",
-        }
-    }
 }

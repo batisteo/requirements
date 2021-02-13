@@ -1,7 +1,11 @@
-use crate::enums::{Comparison, VersionControlSystem};
+mod spec;
+
+use crate::enums::{Comparison, LineType, VersionControlSystem};
 use crate::requirements::Requirement;
+use logos::{Lexer, Logos};
 use pest::iterators::Pair;
 use pest::Parser;
+use spec::Token;
 
 impl VersionControlSystem {
     pub fn from_rule(rule: Rule) -> VersionControlSystem {
@@ -76,7 +80,7 @@ fn parse_package(parsed: Pair<'_, Rule>) -> Requirement<'_> {
     package
 }
 
-pub fn parse(unparsed_file: &str) -> Result<impl Iterator<Item = Requirement>, String> {
+pub fn _parse(unparsed_file: &str) -> Result<impl Iterator<Item = Requirement>, String> {
     let req_file = match RequirementParser::parse(Rule::requirement_file, unparsed_file) {
         Ok(mut rules) => rules.next().unwrap(),
         Err(_) => return Err(String::from("Failed to parse requirements")),
@@ -86,4 +90,68 @@ pub fn parse(unparsed_file: &str) -> Result<impl Iterator<Item = Requirement>, S
         .into_inner()
         .filter(|pair| pair.as_rule() == Rule::line)
         .map(parse_package))
+}
+
+fn comment(lex: &mut Lexer<Line>) -> Option<String> {
+    let slice = lex.slice();
+    let txt = slice.split_at(1).1.trim(); // Trimming “#” and spaces
+    Some(txt.to_string())
+}
+
+fn spec(lex: &mut Lexer<Line>) -> Option<String> {
+    let spec = lex.slice();
+    let stuff = Token::lexer(spec).collect::<Vec<spec::Token>>();
+    // while let Some(token) = iter.next() {
+    //     println!("Spec: {:?}", token)
+    // }
+    Some(format!("{:?}", stuff))
+}
+
+fn extra_index_url(lex: &mut Lexer<Line>) -> Option<String> {
+    let line = lex.slice().trim();
+    Some(String::from(line[18..].trim()))
+}
+
+#[derive(Logos, Debug, PartialEq)]
+pub enum Line {
+    #[regex("#.*", comment)]
+    Comment(String),
+
+    #[regex(r"[a-zA-Z0-9-._]+.*", spec)]
+    Spec(String),
+
+    #[regex(r"--extra-index-url https?://.*", extra_index_url)]
+    ExtraIndexUrl(String),
+
+    #[error]
+    #[regex(r"[ \t\n\f]+", logos::skip)]
+    Error,
+}
+
+impl Line {
+    pub fn to_line_type(self) -> Option<LineType> {
+        match self {
+            Line::Comment(comment) => Some(LineType::Comment(comment)),
+            Line::Spec(spec) => Some(LineType::Specification(spec)),
+            Line::ExtraIndexUrl(url) => Some(LineType::ExtraIndexUrl(url)),
+            Line::Error => None,
+        }
+    }
+}
+
+pub fn parse(unparsed_file: &str) -> Result<Vec<Requirement>, String> {
+    let mut requirements: Vec<Requirement> = vec![];
+    for line in unparsed_file.lines() {
+        let mut requirement = Requirement::default();
+        requirement.line = String::from(line);
+        let mut lex = Line::lexer(line);
+
+        while let Some(token) = lex.next() {
+            let line_type: Option<LineType> = token.to_line_type();
+            println!("{:?}", line_type)
+        }
+        println!("\n{:?}", requirement);
+        requirements.push(requirement);
+    }
+    Ok(requirements)
 }

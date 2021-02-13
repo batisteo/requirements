@@ -1,14 +1,14 @@
 [package]
-name = "requirements"
-version = "0.3.0"
 authors = ["Baptiste Darthenay <baptiste.darthenay@gmail.com>"]
-description = "Python PIP requirements.txt parser"
-keywords = ["python", "pip", "requirements"]
 categories = ["parser-implementations"]
-readme = "README.md"
+description = "Python PIP requirements.txt parser"
 edition = "2018"
+keywords = ["python", "pip", "requirements"]
 license = "MIT"
+name = "requirements"
+readme = "README.md"
 repository = "https://github.com/batisteo/requirements"
+version = "0.4.0"
 
 [[bin]]
 name = "parsereqs"
@@ -19,8 +19,9 @@ name = "requirements"
 path = "./src/lib.rs"
 
 [dependencies]
-regex = "^1"
+globwalk = "^0.7"
+logos = "^0.12"
 pest = "^2"
 pest_derive = "^2"
-globwalk = "^0.7"
+regex = "^1"
 walkdir = "^2"

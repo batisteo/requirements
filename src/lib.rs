@@ -29,7 +29,7 @@ pub use parser::parse;
 
 /// Parses requirements from a string
 pub fn parse_str(content: &str) -> Result<Vec<Requirement>, String> {
-    Ok(parse(content).map(Iterator::collect)?)
+    Ok(parse(content)?)
 }
 
 // TODO: Add file loading code (recursive?) here.
